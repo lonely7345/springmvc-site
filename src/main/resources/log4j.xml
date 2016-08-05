@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <appender name="STDOUT" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[zcjxsoft] %d{yyyy-MM-dd HH:mm:ss} %-5p %m %n" />
+        </layout>
+    </appender>
+
+    <appender name="DEBUG" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${vc.log.path}/vc_debug.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[zcjxsoft] %d{yyyy-MM-dd HH:mm:ss} %-5p [%t]: %m %n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="DEBUG" />
+        </filter>
+    </appender>
+
+    <appender name="INFO" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${vc.log.path}/vc_info.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[zcjxsoft]%d{yyyy-MM-dd HH:mm:ss} %-5p%m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO" />
+            <param name="LevelMax" value="WARN" />
+        </filter>
+    </appender>
+
+
+    <appender name="EXCEPTION" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${vc.log.path}/vc_exception.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[zcjxsoft]%d{yyyy-MM-dd HH:mm:ss} %-5p%l%m%n" />
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="ERROR" />
+            <param name="LevelMax" value="FATAL" />
+        </filter>
+    </appender>
+
+    <appender name="DB" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="File" value="${vc.log.path}/vc_db.log" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[zcjxsoft]%d{yyyy-MM-dd HH:mm:ss} %-5p%m%n" />
+        </layout>
+    </appender>
+
+    <category name="java.sql" additivity="true">
+        <priority value="DEBUG" />
+        <appender-ref ref="DB" />
+    </category>
+
+    <category name="com.zcjxsoft.website" additivity="true">
+        <priority value="${vc.log.level}" />
+        <appender-ref ref="EXCEPTION" />
+        <appender-ref ref="DEBUG" />
+        <appender-ref ref="INFO" />
+    </category>
+
+    <logger name="org.mybatis" additivity="true">
+        <level value="${vc.log.level}" />
+        <appender-ref ref="DB" />
+    </logger>
+
+    <logger name="org.apache.ibatis" additivity="true">
+        <level value="${vc.log.level}" />
+        <appender-ref ref="DB" />
+    </logger>
+
+    <root>
+        <priority value="INFO" />
+        <appender-ref ref="STDOUT" />
+    </root>
+</log4j:configuration>
